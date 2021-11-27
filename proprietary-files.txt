@@ -1,3 +1,4 @@
 ## SHA1SUMs of binaries obtained from external sources
 osm0sis_busybox/busybox|1965dbf03cd9fdc60e26df454ed1696a2b3ee8fc
 tools/busybox-x86|3b30a248936ef4e06f1c4861c05afc078c1b5782
+bash_prebuilt/bash|dcdc87e42e11976bfd857f265875600491f9fa5c
