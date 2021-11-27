@@ -1,3 +1,4 @@
 private/
 proprietary-files.txt.tmp
 *.bak
+/bootdebi/debian-chroot.tar.gz
