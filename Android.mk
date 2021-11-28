@@ -132,6 +132,13 @@ LOCAL_MODULE_TAGS := optional
 $(shell mkdir -p $(TARGET_OUT_ETC)/restore)
 $(shell cp -rf $(LOCAL_PATH)/magisk/setup.tar.gz $(TARGET_OUT_ETC)/restore/setup.tar.gz)
 
+# NX Player libs (for chroot desktop access)
+include $(CLEAR_VARS)
+LOCAL_MODULE       := nxplayer_libs
+LOCAL_MODULE_TAGS  := optional
+$(shell mkdir -p $(TARGET_OUT)/app/NXPlayer/lib/)
+$(shell cp -rf $(LOCAL_PATH)/proprietary/apps/NXPlayer/lib/* $(TARGET_OUT)/app/NXPlayer/lib)
+
 ## ADD PRIVATE ASSETS HERE NOT TO BE INCLUDED IN PUBLIC BUILDS. DO NOT FORGET to .gitignore!!!
 include $(CLEAR_VARS)
 

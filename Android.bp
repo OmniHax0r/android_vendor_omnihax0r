@@ -69,3 +69,13 @@ android_app_import {
 	},
 	privileged: true,
 }
+
+android_app_import {
+	name: "NXPlayer",
+	owner: "oneplus",
+	apk: "proprietary/apps/NXPlayer/NXPlayer.apk",
+	presigned: true,
+	dex_preopt: {
+		enabled: true,
+	},
+}

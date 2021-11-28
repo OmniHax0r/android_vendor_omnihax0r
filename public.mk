@@ -12,7 +12,8 @@ PRODUCT_PACKAGES += \
 	CallRecorder \
 	AndLost \
 	AndLostSMS \
-	BBStats
+	BBStats \
+	NXPlayer
 
 # Privledged APP Perms
 PRODUCT_COPY_FILES += \
