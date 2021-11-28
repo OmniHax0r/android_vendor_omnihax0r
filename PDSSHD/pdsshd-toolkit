@@ -1,0 +1,692 @@
+#!/system/xbin/bash
+
+#Written by:
+#Geofferey@XDA ©2020
+#Free to modify and redistribute
+
+CONF=/data/dropbear/pdsshd.conf
+
+if [[ ! -e $CONF ]]; then
+  
+  mkdir -p /data/dropbear >> /dev/null 2>&1
+  chmod 600 /data/dropbear >> /dev/null 2>&1
+  cp /system/etc/pdsshd.conf $CONF >> /dev/null 2>&1
+  chmod 0600 /data/dropbear/pdsshd.conf >> /dev/null 2>&1
+
+fi
+
+. "$CONF"
+
+clear
+echo "PDSSHD v3.0.0 by:"
+echo "Geofferey@XDA forums"
+sleep 2
+
+clear
+
+PASSWORD (){
+echo "---ENTER-CURRENT-PASS---"
+if [ -z $PASS ]; then 
+echo ""
+echo "Please press ENTER to continue"; read return; clear
+else
+echo ""
+read -s -p "Enter password:" CPASS
+echo ""
+fi
+until [ "$CPASS" = "$PASS" ]; do
+echo ""
+read -s -p "Wrong password, try again:" CPASS
+echo ""
+done
+}
+
+MOUNT (){
+#mount -o remount,rw /system
+echo >> /dev/null 2>&1
+}
+
+UNMOUNT (){
+#mount -o remount,ro /system
+echo >> /dev/null 2>&1
+}
+
+SSHD_CONFIG (){
+if ! [ -z $PASS ]; then 
+echo ""
+fi
+echo "---CONFIGURE-SSH-DAEMON---"
+echo ""
+read -s -p "Enter new password:" NEWPASS
+echo ""
+while [[ -z "$NEWPASS" ]]; do
+echo ""
+echo "Password CAN NOT be blank"
+echo ""
+read -s -p "Enter new password:" NEWPASS;
+echo ""
+done
+
+sed -i -e"s/^PASS=.*/PASS=$NEWPASS/" "$CONF"
+if test $? -eq 0; then
+echo 'password written'
+else 
+echo 'write attempt failed!'
+fi
+
+echo ""
+
+read -p "Enter new port: " NEWPORT
+if test "$NEWPORT" = ""; then
+echo "DEFAULT PORT #2222"; sed -i -e"s/^PORT=.*/PORT=2222/" "$CONF"
+else
+sed -i -e"s/^PORT=.*/PORT=$NEWPORT/" "$CONF"
+fi
+
+if test $? -eq 0; then
+echo "port set"
+else 
+echo "write attempt failed!"
+fi 
+
+echo ""
+
+while true 
+do
+read -r -p 'Enable SSH? ' choice
+case "$choice" in
+n|N|no|No|NO) echo "SSH disabled"; 
+sed -i -e"s/^SSH=.*/SSH=0/" "$CONF"
+break;;
+y|Y|yes|Yes|YEs|YES|YeS|yeS|yES) echo "SSH enabled";
+sed -i -e"s/^SSH=.*/SSH=1/" "$CONF"
+break;;
+*) echo 'Nothing done'; 
+break;;
+esac
+done
+
+echo ""
+
+while true 
+do
+read -r -p 'Enable Wakelock on Connect? ' choice
+case "$choice" in
+n|N|no|No|NO) echo "Wakelock disabled"; 
+sed -i -e"s/^WAKELOCK=.*/WAKELOCK=0/" "$CONF"
+break;;
+y|Y|yes|Yes|YEs|YES|YeS|yeS|yES) echo "Wakelock enabled";
+sed -i -e"s/^WAKELOCK=.*/WAKELOCK=1/" "$CONF"
+break;;
+*) echo 'Nothing done'; 
+break;;
+esac
+done
+
+echo ""
+
+while true 
+do
+read -r -p 'Enable Notification on Connect? ' choice
+case "$choice" in
+n|N|no|No|NO) echo "Notification disabled"; 
+sed -i -e"s/^NOTIFY=.*/NOTIFY=0/" "$CONF"
+break;;
+y|Y|yes|Yes|YEs|YES|YeS|yeS|yES) echo "Notification enabled";
+sed -i -e"s/^NOTIFY=.*/NOTIFY=1/" "$CONF"
+break;;
+*) echo 'Nothing done'; 
+break;;
+esac
+done
+}
+
+REVERSE_SSH (){
+echo ""
+
+echo "---CONFIGURE-REVERSE-SSH---"
+
+echo ""
+
+read -p "Enter reverse listen port: " NEWREVPORT
+if test "$NEWREVPORT" = ""; then
+echo "DEFAULT IS BLANK"; sed -i -e"s/^REVPORT=.*/REVPORT=/" "$CONF"
+else
+sed -i -e"s/^REVPORT=.*/REVPORT=$NEWREVPORT/" "$CONF"
+fi
+
+if test $? -eq 0; then
+echo "port set"
+else 
+echo "write attempt failed!"
+fi
+
+echo ""
+
+read -p "Enter remote server: " NEWREMSERV
+if test "$NEWREMSERV" = ""; then
+echo "DEFAULT IS BLANK"; sed -i -e"s/^REMSERV=.*/REMSERV=/" "$CONF"
+else
+sed -i -e"s/^REMSERV=.*/REMSERV=$NEWREMSERV/" "$CONF"
+fi
+
+if test $? -eq 0; then
+echo "server set"
+else 
+echo "write attempt failed!"
+fi
+
+echo ""
+
+read -p "Enter remote serv port: " NEWREMSERVPORT
+if test "$NEWREMSERVPORT" = ""; then
+echo "DEFAULT IS 22"; sed -i -e"s/^REMSERVPORT=.*/REMSERVPORT=22/" "$CONF"
+else
+sed -i -e"s/^REMSERVPORT=.*/REMSERVPORT=$NEWREMSERVPORT/" "$CONF"
+fi
+
+if test $? -eq 0; then
+echo "port set"
+else 
+echo "write attempt failed!"
+fi
+
+echo ""
+
+read -p "Enter remote username: " NEWREMUSER
+if test "$NEWREMUSER" = ""; then
+echo "DEFAULT IS BLANK"; sed -i -e"s/^REMUSER=.*/REMUSER=/" "$CONF"
+else
+sed -i -e"s/^REMUSER=.*/REMUSER=$NEWREMUSER/" "$CONF"
+fi
+
+if test $? -eq 0; then
+echo "username set"
+else 
+echo "write attempt failed!"
+fi
+
+echo ""
+
+read -p "Enter path to remote private key: "  PRIKEYLOC
+echo ""
+echo "---CONVERTING-PRIVATE-KEY---"; mkdir /system/etc/.ssh; mkdir /sdcard/.ssh; rm /system/etc/.ssh/reverse_ssh_key; dropbearconvert openssh dropbear "$PRIKEYLOC" /system/etc/.ssh/reverse_ssh_key; chmod 400 /system/etc/.ssh/reverse_ssh_key; cp "$PRIKEYLOC" /system/etc/.ssh/openssh_key; chmod 400 /system/etc/.ssh/openssh_key
+
+echo ""
+
+while true 
+do
+read -r -p 'Enable Reverse SSH? ' choice
+case "$choice" in
+n|N|no|No|NO) echo "Reverse SSH disabled"; 
+sed -i -e"s/^REVSSH=.*/REVSSH=0/" "$CONF"
+break;;
+y|Y|yes|Yes|YEs|YES|YeS|yeS|yES) echo "Reverse SSH enabled";
+sed -i -e"s/^REVSSH=.*/REVSSH=1/" "$CONF"
+break;;
+*) echo 'Nothing done'; 
+break;;
+esac
+done
+}
+
+HTTP_PROXY (){
+echo ""
+
+echo "---CONFIGURE-HTTP-PROXY---"
+echo ""
+
+read -p "Enter socks listen port: " NEWSOCKPORT
+if test "$NEWSOCKPORT" = ""; then
+echo "DEFAULT IS BLANK"; sed -i -e"s/^SOCKSPORT=.*/SOCKSPORT=/" "$CONF"
+else
+sed -i -e"s/^SOCKSPORT=.*/SOCKSPORT=$NEWSOCKPORT/" "$CONF"    
+fi
+
+if test $? -eq 0; then
+echo "port set"
+else 
+echo "write attempt failed!"
+fi
+
+echo ""
+
+while true 
+do
+read -r -p 'Enable HTTP SSH? ' choice
+case "$choice" in
+n|N|no|No|NO) echo "HTTP SSH disabled"; 
+sed -i -e"s/^HTTPSSH=.*/HTTPSSH=0/" "$CONF"
+break;;
+y|Y|yes|Yes|YEs|YES|YeS|yeS|yES) echo "HTTP SSH enabled";
+sed -i -e"s/^HTTPSSH=.*/HTTPSSH=1/" "$CONF"
+break;;
+*) echo 'Nothing done'; 
+break;;
+esac
+done
+}
+
+DDNS (){
+echo ""
+
+echo "--CONFIGURE-DDNS--"
+echo ""
+
+read -p "Enter username: " DDNSUSER
+if test "DDNSUSER" = ""; then
+echo "DEFAULT UNCONFIGURED"; sed -i -e"s/^--username .*/--username/" /system/etc/inadyn.conf
+else
+sed -i -e"s/^--username .*/--username $DDNSUSER/" /system/etc/inadyn.conf 
+fi
+
+if test $? -eq 0; then
+echo "user set"
+else 
+echo "write attempt failed!"
+fi
+
+echo ""
+
+read -p "Enter password: " DDNSPASS
+if test "DDNSPASS" = ""; then
+echo "DEFAULT UNCONFIGURED"; sed -i -e"s/^--password .*/--password/" /system/etc/inadyn.conf
+else
+sed -i -e"s/^--password .*/--password $DDNSPASS/" /system/etc/inadyn.conf 
+fi
+
+if test $? -eq 0; then
+echo "pass set"
+else 
+echo "write attempt failed!"
+fi
+
+echo ""
+
+read -p "Enter alias: " DDNSALIAS
+if test "DDNSALIAS" = ""; then
+echo "DEFAULT UNCONFIGURED"; sed -i -e"s/^--alias .*/--alias/" /system/etc/inadyn.conf
+else
+sed -i -e"s/^--alias .*/--alias $DDNSALIAS/" /system/etc/inadyn.conf 
+fi
+
+if test $? -eq 0; then
+echo "alias set"
+else 
+echo "write attempt failed!"
+fi
+
+echo ""
+
+read -p "Enter provider: " DDNSSYSTEM
+if test "DDNSSYSTEM" = ""; then
+echo "DEFAULT UNCONFIGURED"; sed -i -e"s/^--dyndns_system .*/--dyndns_system/" /etc/inadyn.conf
+else
+sed -i -e"s/^--dyndns_system .*/--dyndns_system $DDNSSYSTEM/" /etc/inadyn.conf 
+fi
+
+if test $? -eq 0; then
+echo "provider set"
+else 
+echo "write attempt failed!"
+fi
+
+echo ""
+
+while true 
+do
+read -r -p 'Enable DDNS? ' choice
+case "$choice" in
+n|N|no|No|NO) echo "DDNS disabled"; 
+sed -i -e"s/^INADYN=.*/INADYN=0/" "$CONF"
+break;;
+y|Y|yes|Yes|YEs|YES|YeS|yeS|yES) echo "DDNS enabled";
+sed -i -e"s/^INADYN=.*/INADYN=1/" "$CONF"
+break;;
+*) echo 'Nothing done'; 
+break;;
+esac
+done
+}
+
+KEYS (){
+echo ""
+echo "---REMOVE-OLD-KEYS---"
+echo ""
+
+while true 
+  do
+    read -r -p 'Remove old key(s)? ' CHOICE
+    case "$CHOICE" in
+    n|N|no|No|NO) echo "Keeping old key(s)";
+    break;;
+    y|Y|yes|Yes|YEs|YES|YeS|yeS|yES) echo "Removing old key(s)";
+    rm /etc/dropbear/dropbear_*_host_key;
+    break;;
+    *) echo 'Keeping old key(s)'; 
+    break;;
+  esac
+  done
+
+echo ""
+
+echo "---GENERATING-RSA-KEY---"; dropbearkey -t rsa -f /etc/dropbear/dropbear_rsa_host_key; chmod 400 /etc/dropbear/dropbear_rsa_host_key
+
+echo ""
+
+echo "---GENERATING-DSS-KEY---"; dropbearkey -t dss -f /etc/dropbear/dropbear_dss_host_key; chmod 400 /etc/dropbear/dropbear_dss_host_key 
+
+echo ""
+
+echo "---GENERATING-PRI-RSA-KEY---"; dropbearkey -t rsa -f /sdcard/device-pri-key
+
+echo ""
+
+echo "---GENERATING-PUB-RSA-KEY---"; dropbearkey -y -f /sdcard/device-pri-key > /etc/.ssh/authorized_keys/id_rsa.pub; chmod 400 /etc/.ssh/authorized_keys/id_rsa.pub; 
+echo "---The DEVICE PRIVATE KEY located in:"
+echo "/sdcard/device-pri-key is now authorized for use"
+
+echo ""
+
+echo "---CONVERTING-RSA-KEY---"; dropbearconvert dropbear openssh /sdcard/device-pri-key /sdcard/device-pri-key-openssh
+
+echo ""
+
+echo "The private keys used to access this device are located on the sdcard."
+echo "Please move them to a safe location."
+}
+
+
+HELP () {
+echo "Available options:"
+echo " -a configures AIO"
+echo " -b config BACKUP"
+echo " -s configures SSH"
+echo " -r configures REVERSE SSH"
+echo " -p configures HTTP SOCKS PROXY"
+echo " -d configures DDNS"
+echo " -k configures SSH KEYS"
+echo " -e executes enabled SERVICES"
+echo " -c checks running SERVICES"
+echo " -h displays this HELP message"
+echo " -u uninstalls PDSSHD"
+echo ""
+exit 0
+}
+
+RESTART (){
+
+echo ""; echo "Restarting dropbear with new settings..."
+
+killall dropbear
+
+echo ""
+
+dropbear
+
+echo ""
+
+if [[ $(ps |grep dropbear) ]]; then
+echo "Oh yeah! It's running :)"
+else
+echo "Aww man! It's not running :("
+fi
+
+echo ""
+
+echo ""; echo "Press RETURN to continue"; read return; clear
+}
+
+EXECUTE (){
+
+if [ -e $PID ]; then
+rm $PID
+fi
+
+if test $SSH -eq 1; then
+/system/exbin/dropbear -A -N root -U 0 -G 0 -T /etc/.ssh/authorized_keys/id_rsa.pub -C "$PASS" -p "$PORT" -P $PID -c /system/xbin/bash
+
+echo "Check if Dropbear is running..."
+echo ""
+ps | grep dropbear
+echo "" 
+fi
+
+if [[ $(ps |grep dropbear) ]]; then
+echo "Oh yeah! It's running :)"
+else
+echo "Aww man! It's not running :("
+fi
+
+if test $INADYN -eq 1; then
+inadyn
+fi
+
+if test $REVSSH -eq 1; then
+reverse_ssh >/dev/null &
+fi
+
+if test $HTTPSSH -eq 1; then
+http_ssh >/dev/null &
+fi
+
+if test $WAKELOCK -eq 1; then
+dropbear_wakelock > /dev/null 2>&1 &
+fi
+}
+
+INSTALL (){
+echo "Installing PDSSHD"
+echo "# PDSSHD & toolkit config" > /system/etc/sshd.conf
+echo "" >> /system/etc/sshd.conf
+echo "PASS=" >> /system/etc/sshd.conf
+echo "PORT=" >> /system/etc/sshd.conf
+echo "REMSERV=" >> /system/etc/sshd.conf
+echo "REVPORT=" >> /system/etc/sshd.conf
+echo "REMSERVPORT=" >> /system/etc/sshd.conf
+echo "SOCKSPORT=" >> /system/etc/sshd.conf
+echo "REMUSER=" >> /system/etc/sshd.conf
+SSH=1
+REVSSH=1
+HTTPSSH=0
+INADYN=1
+KEYFILE=/system/etc/.ssh/reverse_ssh_key
+CONVERTKEY=/sdcard/.ssh/reverse_ssh_key
+OPENSSHKEY=/system/etc/.ssh/openssh_key
+}
+
+UNINSTALL (){
+while true 
+  do
+    echo ""
+    read -r -p 'Uninstall PDSSHD? ' CHOICE
+    case "$CHOICE" in
+    n|N|no|No|NO) echo "";
+                               echo "Aborting 'Uninstall!";
+    break;;
+    y|Y|yes|Yes|YEs|YES|YeS|yeS|yES) echo "Uninstalling PDSSHD....";
+    sleep 1;
+    rm -r /system/exbin;
+    rm -r /system/etc/dropbear;
+    rm /system/xbin/dropbear;
+    rm /system/xbin/ssh;
+    rm /system/xbin/ssh_auto;
+    rm /system/xbin/reverse_ssh;
+    rm /system/xbin/http_ssh;
+    rm /system/xbin/inadyn;
+    rm /system/xbin/rsync;
+    rm /system/xbin/sshd_config;
+    rm /system/etc/sshd.conf;
+    rm /system/etc/inadyn.conf;
+
+    if [[ -e /system/etc/init.d/60dropbear ]]; then
+    rm /system/etc/init.d/60dropbear
+    fi
+
+    if [[ -e /system/su.d/60dropbear ]]; then
+    rm /system/su.d/60dropbear
+    fi
+
+    rm /system/xbin/dropbearkey
+
+    echo "";
+
+    echo "done";
+     
+    break;;
+
+    *) echo 'Keeping old key(s)'; 
+    break;;
+  esac
+  done
+}
+
+CHECKSCRIPT() {
+  pgrep -lf ".[ /]$1( |\$)"
+}
+
+CHECK (){
+if [[ $(ps |grep dropbear) ]]; then
+echo "Dropbear is running :)";
+echo ""
+fi
+
+if test $SSH -eq 0; then
+echo "SSH disabled"
+echo ""
+fi
+
+if [[ $(ps |grep inadyn) ]]; then
+echo "DDNS is running :)";
+echo ""
+fi
+
+if test $INADYN -eq 0; then
+echo "DDNS disabled"
+echo ""
+fi
+
+if [[  $(CHECKSCRIPT "reverse_ssh") ]]; then
+echo "Reverse SSH is running :)";
+echo ""
+fi
+
+
+if test $REVSSH -eq 0; then
+echo "Reverse SSH disabled"
+echo ""
+fi
+
+if [[ $(CHECKSCRIPT "http_ssh") ]]; then
+echo "HTTP tunnel is running :)";
+echo ""
+fi
+
+if test $HTTPSSH -eq 0; then
+echo "HTTP tunnel disabled"
+echo ""
+fi
+
+if [[ $(CHECKSCRIPT "dropbear_wakelock") ]]; then
+echo "Wakelock on connect is running :)";
+echo ""
+fi
+
+if test $WAKELOCK -eq 0; then 
+echo "Wakelock on connect is disabled"
+echo ""
+fi
+}
+
+BACKUP () { 
+if ! [ -e /data/etc ]; then
+mkdir /data/etc
+chmod -R 0600 /data/etc
+else
+chmod -R 0600 /data/etc
+fi
+
+if [ -e /data/etc/dropbear ]; then 
+rm -r /data/etc/dropbear
+fi
+
+cp -R /etc/dropbear /data/etc/dropbear
+
+if [ -d /data/etc/dropbear/.ssh ]; then 
+rm -r /data/etc/dropbear/.ssh 
+fi
+
+cp -R /system/etc/.ssh /data/etc/
+
+if [ -e /data/etc/pdsshd.conf ]; then 
+rm /data/etc/pdsshd.conf
+fi
+
+cp /system/etc/pdsshd.conf /data/etc/pdsshd.conf
+
+if [ -e /data/etc/inadyn.conf ]; then 
+rm /data/etc/inadyn.conf
+fi
+
+cp /system/etc/inadyn.conf /data/etc/inadyn.conf
+
+echo ""
+echo "Configuration backed up to /data/etc"
+echo ""
+}
+
+CONFIGURED () {
+sed -i -e"s/^CONFIGURED=.*/CONFIGURED=1/" "$CONF"
+sleep 1
+}
+
+
+
+if [[ $@ ]]; then
+    while getopts "absrpdkechu" OPTION; do
+        case $OPTION in
+            a) 
+                PASSWORD; MOUNT; SSHD_CONFIG; REVERSE_SSH; HTTP_PROXY; DDNS; KEYS; CONFIGURED; BACKUP; RESTART; UNMOUNT;
+                ;;
+            b) PASSWORD; BACKUP 
+                ;;
+            s)
+                PASSWORD; MOUNT; SSHD_CONFIG; CONFIGURED; UNMOUNT; BACKUP; RESTART
+                ;;
+            r)
+                PASSWORD; MOUNT; REVERSE_SSH; CONFIGURED; UNMOUNT; BACKUP
+                ;;
+            p)
+                PASSWORD; MOUNT; HTTP_PROXY; CONFIGURED; UNMOUNT; BACKUP
+                ;;
+            d) 
+                PASSWORD; MOUNT; DDNS; CONFIGURED; UNMOUNT; BACKUP
+                ;;
+            k)
+                PASSWORD; MOUNT; KEYS; CONFIGURED; UNMOUNT; RESTART; BACKUP
+                ;;
+            e) 
+                EXECUTE
+                ;;
+            c) 
+                CHECK
+                ;;
+            h)
+                HELP
+                ;;
+            u) 
+                PASSWORD; MOUNT; UNINSTALL; UNMOUNT
+                ;;
+            \?)
+                HELP
+                ;;
+        esac
+    done
+else
+    HELP
+fi
+
+sleep 1
+
+exit 0
+

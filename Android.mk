@@ -97,6 +97,27 @@ $(shell cp -rf $(LOCAL_PATH)/chainfire_liveboot/liveboot.sh $(TARGET_OUT)/xbin/l
 
 #endif
 
+# PDSSHD (persist droid sshd)
+include $(CLEAR_VARS)
+LOCAL_MODULE       := pdsshd
+LOCAL_MODULE_TAGS  := optional
+$(shell mkdir -p $(TARGET_OUT)/xbin)
+$(shell mkdir -p $(TARGET_OUT)/exbin/)
+$(shell mkdir -p $(TARGET_OUT_ETC)/init.d/)
+$(shell cp $(LOCAL_PATH)/PDSSHD/60dropbear $(TARGET_OUT_ETC)/init.d)
+$(shell cp $(LOCAL_PATH)/PDSSHD/pdsshd.conf $(TARGET_OUT_ETC))
+$(shell cp $(LOCAL_PATH)/PDSSHD/dropbear $(TARGET_OUT)/xbin)
+$(shell cp $(LOCAL_PATH)/PDSSHD/sftp-server.sh $(TARGET_OUT)/xbin/sftp-server)
+$(shell cp $(LOCAL_PATH)/PDSSHD/pdsshd-toolkit $(TARGET_OUT)/xbin)
+$(shell cp $(LOCAL_PATH)/PDSSHD/sftp-server $(TARGET_OUT)/exbin)
+$(shell cp $(LOCAL_PATH)/PDSSHD/dropbearmulti $(TARGET_OUT)/exbin)
+$(shell ln -sf /system/exbin/dropbearmulti $(TARGET_OUT)/exbin/dropbear)
+$(shell ln -sf /system/exbin/dropbearmulti $(TARGET_OUT)/xbin/scp)
+$(shell ln -sf /system/exbin/dropbearmulti $(TARGET_OUT)/xbin/dbclient)
+$(shell ln -sf /system/exbin/dropbearmulti $(TARGET_OUT)/xbin/ssh)
+$(shell ln -sf /system/exbin/dropbearmulti $(TARGET_OUT)/xbin/dropbearkey)
+$(shell ln -sf /system/exbin/dropbearmulti $(TARGET_OUT)/xbin/dropbearconvert)
+
 ## ADD PRIVATE ASSETS HERE NOT TO BE INCLUDED IN PUBLIC BUILDS. DO NOT FORGET to .gitignore!!!
 include $(CLEAR_VARS)
 

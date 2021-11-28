@@ -1,0 +1,4 @@
+#!/system/bin/sh
+
+/system/xbin/pdsshd-toolkit -e >> /dev/null 2>&1 &
+
