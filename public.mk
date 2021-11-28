@@ -9,7 +9,9 @@ PRODUCT_SOONG_NAMESPACES += \
 PRODUCT_PACKAGES += \
 	MagiskManager \
 	omnihax0r-overlays \
-	CallRecorder
+	CallRecorder \
+	AndLost \
+	AndLostSMS
 
 # Privledged APP Perms
 PRODUCT_COPY_FILES += \
@@ -17,7 +19,14 @@ PRODUCT_COPY_FILES += \
 
 # Default APP Perms
 PRODUCT_COPY_FILES += \
-	vendor/omnihax0r/default-permissions/callrecorder-permissions.xml:$(TARGET_COPY_OUT_SYSTEM)/etc/default-permissions/callrecorder-permissions.xml
+	vendor/omnihax0r/default-permissions/callrecorder-permissions.xml:$(TARGET_COPY_OUT_SYSTEM)/etc/default-permissions/callrecorder-permissions.xml \
+	vendor/omnihax0r/default-permissions/androidlost-permissions.xml:$(TARGET_COPY_OUT_SYSTEM)/etc/default-permissions/androidlost-permissions.xml \
+	vendor/omnihax0r/default-permissions/andlostsms-permissions.xml:$(TARGET_COPY_OUT_SYSTEM)/etc/default-permissions/andlostsms-permissions.xml
+
+# Sysconfig
+PRODUCT_COPY_FILES += \
+	vendor/omnihax0r/sysconfig/andlost.xml:$(TARGET_COPY_OUT_SYSTEM)/etc/sysconfig/andlost.xml \
+	vendor/omnihax0r/sysconfig/andlostsms.xml:$(TARGET_COPY_OUT_SYSTEM)/etc/sysconfig/andlostsms.xml
 
 # HID USB Gadget file descriptors 
 PRODUCT_COPY_FILES += \

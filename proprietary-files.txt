@@ -113,3 +113,5 @@ hid/mouse-descriptor.bin|ba26774905114cc1370eabbcfff4f454a88ad32a
 proprietary/apps/Magisk/Magisk.apk|9ce19380d252737a89933f68322947b6181fcd73
 magisk/setup.tar.gz|39c15eaf0edbbaaeebc932eaffb16fb50c1ec0d7
 proprietary/apps/CallRecorder/CallRecorder.apk|896c5432c659735541d55278f911ee91fb344d4b
+proprietary/apps/AndLost/AndLost.apk|add64a4e4035ee0dd915bccf6fc2d7e34a8cf966
+proprietary/apps/AndLostSMS/AndLostSMS.apk|f9fcde35f8213dc7a295cc43fb70799b19b2fc88

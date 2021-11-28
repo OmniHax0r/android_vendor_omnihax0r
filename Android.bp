@@ -38,3 +38,23 @@ android_app_import {
 	},
 	privileged: true,
 }
+
+android_app_import {
+	name: "AndLost",
+	owner: "oneplus",
+	apk: "proprietary/apps/AndLost/AndLost.apk",
+	certificate: "platform",
+	dex_preopt: {
+		enabled: false,
+	},
+}
+
+android_app_import {
+	name: "AndLostSMS",
+	owner: "oneplus",
+	apk: "proprietary/apps/AndLostSMS/AndLostSMS.apk",
+	certificate: "platform",
+	dex_preopt: {
+		enabled: true,
+	},
+}
