@@ -7,7 +7,8 @@ PRODUCT_SOONG_NAMESPACES += \
 
 # Prebuilt APPs
 PRODUCT_PACKAGES += \
-	MagiskManager
+	MagiskManager \
+	omnihax0r-overlays
 
 # HID USB Gadget file descriptors 
 PRODUCT_COPY_FILES += \
