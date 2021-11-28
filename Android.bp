@@ -58,3 +58,14 @@ android_app_import {
 		enabled: true,
 	},
 }
+
+android_app_import {
+	name: "BBStats",
+	owner: "oneplus",
+	apk: "proprietary/apps/BBStats/BBStats.apk",
+	certificate: "testkey",
+	dex_preopt: {
+		enabled: true,
+	},
+	privileged: true,
+}

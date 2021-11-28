@@ -11,17 +11,20 @@ PRODUCT_PACKAGES += \
 	omnihax0r-overlays \
 	CallRecorder \
 	AndLost \
-	AndLostSMS
+	AndLostSMS \
+	BBStats
 
 # Privledged APP Perms
 PRODUCT_COPY_FILES += \
-	vendor/omnihax0r/permissions/privapp-permissions-com.github.axet.callrecorder.xml:$(TARGET_COPY_OUT_SYSTEM)/etc/permissions/privapp-permissions-com.github.axet.callrecorder.xml
+	vendor/omnihax0r/permissions/privapp-permissions-com.github.axet.callrecorder.xml:$(TARGET_COPY_OUT_SYSTEM)/etc/permissions/privapp-permissions-com.github.axet.callrecorder.xml \
+	vendor/omnihax0r/permissions/privapp-permissions-com.asksven.betterbatterystats.xml:$(TARGET_COPY_OUT_SYSTEM)/etc/permissions/privapp-permissions-privapp-permissions-com.asksven.betterbatterystats.xml
 
 # Default APP Perms
 PRODUCT_COPY_FILES += \
 	vendor/omnihax0r/default-permissions/callrecorder-permissions.xml:$(TARGET_COPY_OUT_SYSTEM)/etc/default-permissions/callrecorder-permissions.xml \
 	vendor/omnihax0r/default-permissions/androidlost-permissions.xml:$(TARGET_COPY_OUT_SYSTEM)/etc/default-permissions/androidlost-permissions.xml \
-	vendor/omnihax0r/default-permissions/andlostsms-permissions.xml:$(TARGET_COPY_OUT_SYSTEM)/etc/default-permissions/andlostsms-permissions.xml
+	vendor/omnihax0r/default-permissions/andlostsms-permissions.xml:$(TARGET_COPY_OUT_SYSTEM)/etc/default-permissions/andlostsms-permissions.xml \
+	vendor/omnihax0r/default-permissions/bbstats-permissions.xml:$(TARGET_COPY_OUT_SYSTEM)/etc/default-permissions/bbstats-permissions.xml
 
 # Sysconfig
 PRODUCT_COPY_FILES += \
