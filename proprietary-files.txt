@@ -71,3 +71,5 @@ bootdebi/pulseaudio/lib/module-virtual-source.so|89d94767a185c7b8f2718622121bb47
 bootdebi/pulseaudio/lib/module-virtual-surround-sink.so|138c3762c51f1709e72d857da8e5e1f518e4ed07
 bootdebi/pulseaudio/lib/module-volume-restore.so|c0ddabb7bbe5ac7716f3d950dee9b29beb34108e
 bootdebi/debian-chroot.tar.gz|55415ffe3e0eeac4d4ddb2eec407dc95c8062738
+chainfire_liveboot/liveboot.so|7899b0bebe68e2980944f1b37b5e3130e60d0d31
+chainfire_liveboot/liveboot-daemonize|c664ee3d14c0a7e3f4871e7df7fba77a57deda47

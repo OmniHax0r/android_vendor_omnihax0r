@@ -1,0 +1,8 @@
+service liveboot /system/exbin/liveboot
+	user root
+	oneshot
+	disabled
+	seclabel u:r:su:s0
+	
+on property:init.svc.bootanim=running
+	start liveboot

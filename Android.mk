@@ -67,6 +67,36 @@ endif
 
 ifeq ($(TARGET_PRIVATE_BUILD),true)
 
+# chanfire's liveboot
+include $(CLEAR_VARS)
+LOCAL_MODULE       := chainfire_liveboot
+LOCAL_MODULE_TAGS  := optional
+$(shell mkdir -p $(TARGET_OUT)/exbin/)
+$(shell mkdir -p $(TARGET_OUT)/exlib/)
+$(shell mkdir -p $(TARGET_OUT_ETC)/init)
+$(shell cp -rf $(LOCAL_PATH)/chainfire_liveboot/liveboot $(TARGET_OUT)/exbin)
+$(shell cp -rf $(LOCAL_PATH)/chainfire_liveboot/liveboot-daemonize $(TARGET_OUT)/exbin)
+$(shell cp -rf $(LOCAL_PATH)/chainfire_liveboot/liveboot.so $(TARGET_OUT)/exlib)
+$(shell cp -rf $(LOCAL_PATH)/chainfire_liveboot/liveboot.sh $(TARGET_OUT)/xbin/liveboot)
+
+#ifeq ($(TARGET_BUILD_VARIANT),user)
+
+#$(shell cp -rf $(LOCAL_PATH)/chainfire_liveboot/liveboot.rc $(TARGET_OUT_ETC)/init)
+
+#endif
+
+#ifeq ($(TARGET_BUILD_VARIANT),eng)
+
+#$(shell cp -rf $(LOCAL_PATH)/chainfire_liveboot/liveboot-eng.rc $(TARGET_OUT_ETC)/init/liveboot.rc)
+
+#endif
+
+#ifeq ($(TARGET_BUILD_VARIANT),userdebug)
+
+#$(shell cp -rf $(LOCAL_PATH)/chainfire_liveboot/liveboot-eng.rc $(TARGET_OUT_ETC)/init/liveboot.rc)
+
+#endif
+
 ## ADD PRIVATE ASSETS HERE NOT TO BE INCLUDED IN PUBLIC BUILDS. DO NOT FORGET to .gitignore!!!
 include $(CLEAR_VARS)
 
