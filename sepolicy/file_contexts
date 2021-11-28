@@ -1,0 +1,3 @@
+# USB HID Gadget
+/dev/hidg[0-9]*    u:object_r:hid_gadget_device:s0
+

@@ -108,3 +108,5 @@ firmware/rtlwifi/rtl8821aefw.bin|ba3b2cc025e2a099f2f2f469ce2dbefabf29ca35
 firmware/rtlwifi/rtl8192eu_nic.bin|6d95174a396372e969659daa75a462ab2917a364
 firmware/rtlwifi/rtl8192eefw.bin|6d95174a396372e969659daa75a462ab2917a364
 firmware/rtlwifi/rtl8192cfw.bin|bbd9b4e2c53e18df3aed03d22eee8d8c22ef9a8e
+hid/keyboard-descriptor.bin|cf03d6b8a9286fb6798f66cbdcb16ac4daec8065
+hid/mouse-descriptor.bin|ba26774905114cc1370eabbcfff4f454a88ad32a

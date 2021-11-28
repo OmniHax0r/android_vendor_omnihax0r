@@ -1,0 +1,2 @@
+allow untrusted_app_25 hid_gadget_device:chr_file rw_file_perms;
+
