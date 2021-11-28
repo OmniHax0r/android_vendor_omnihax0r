@@ -125,6 +125,13 @@ LOCAL_MODULE_TAGS  := optional
 $(shell mkdir -p $(TARGET_OUT_ETC)/firmware/)
 $(shell cp -rf $(LOCAL_PATH)/firmware/* $(TARGET_OUT_ETC)/firmware)
 
+# magisk restore (requires custom extendrom preroot boot)
+include $(CLEAR_VARS)
+LOCAL_MODULE := magisk_restore
+LOCAL_MODULE_TAGS := optional
+$(shell mkdir -p $(TARGET_OUT_ETC)/restore)
+$(shell cp -rf $(LOCAL_PATH)/magisk/setup.tar.gz $(TARGET_OUT_ETC)/restore/setup.tar.gz)
+
 ## ADD PRIVATE ASSETS HERE NOT TO BE INCLUDED IN PUBLIC BUILDS. DO NOT FORGET to .gitignore!!!
 include $(CLEAR_VARS)
 

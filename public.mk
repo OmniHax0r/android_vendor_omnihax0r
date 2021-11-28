@@ -5,6 +5,10 @@ TARGET_PUBLIC_BUILD := true
 PRODUCT_SOONG_NAMESPACES += \
     vendor/omnihax0r
 
+# Prebuilt APPs
+PRODUCT_PACKAGES += \
+	MagiskManager
+
 # HID USB Gadget file descriptors 
 PRODUCT_COPY_FILES += \
 	vendor/omnihax0r/hid/keyboard-descriptor.bin:$(TARGET_COPY_OUT_SYSTEM)/etc/keyboard-descriptor.bin \
