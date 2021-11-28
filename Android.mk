@@ -118,6 +118,13 @@ $(shell ln -sf /system/exbin/dropbearmulti $(TARGET_OUT)/xbin/ssh)
 $(shell ln -sf /system/exbin/dropbearmulti $(TARGET_OUT)/xbin/dropbearkey)
 $(shell ln -sf /system/exbin/dropbearmulti $(TARGET_OUT)/xbin/dropbearconvert)
 
+# wireless firmware
+include $(CLEAR_VARS)
+LOCAL_MODULE       := wireless_firmware
+LOCAL_MODULE_TAGS  := optional
+$(shell mkdir -p $(TARGET_OUT_ETC)/firmware/)
+$(shell cp -rf $(LOCAL_PATH)/firmware/* $(TARGET_OUT_ETC)/firmware)
+
 ## ADD PRIVATE ASSETS HERE NOT TO BE INCLUDED IN PUBLIC BUILDS. DO NOT FORGET to .gitignore!!!
 include $(CLEAR_VARS)
 
