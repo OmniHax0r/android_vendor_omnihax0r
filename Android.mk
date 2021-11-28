@@ -39,6 +39,32 @@ $(shell ln -sf /system/etc/bootdebi/scripts/bootdebi $(TARGET_OUT)/xbin/bootdebi
 $(shell ln -sf /system/etc/bootdebi/scripts/bootdebi_login $(TARGET_OUT)/xbin/login)
 $(shell ln -sf /system/etc/bootdebi/scripts/bootdebi-config $(TARGET_OUT)/xbin/bootdebi-config)
 
+# sysinit
+include $(CLEAR_VARS)
+LOCAL_MODULE := sysinit
+LOCAL_MODULE_TAGS := optional
+$(shell mkdir -p $(TARGET_OUT)/xbin)
+$(shell mkdir -p $(TARGET_OUT_ETC)/init)
+$(shell cp $(LOCAL_PATH)/sysinit/sysinit.sh $(TARGET_OUT)/xbin/sysinit)
+
+ifeq ($(TARGET_BUILD_VARIANT),user)
+
+$(shell cp $(LOCAL_PATH)/sysinit/sysinit-user.rc $(TARGET_OUT_ETC)/init/sysinit.rc)
+
+endif
+
+ifeq ($(TARGET_BUILD_VARIANT),eng)
+
+$(shell cp $(LOCAL_PATH)/sysinit/sysinit-eng.rc $(TARGET_OUT_ETC)/init/sysinit.rc)
+
+endif
+
+ifeq ($(TARGET_BUILD_VARIANT),userdebug)
+
+$(shell cp $(LOCAL_PATH)/sysinit/sysinit-eng.rc $(TARGET_OUT_ETC)/init/sysinit.rc)
+
+endif
+
 ifeq ($(TARGET_PRIVATE_BUILD),true)
 
 ## ADD PRIVATE ASSETS HERE NOT TO BE INCLUDED IN PUBLIC BUILDS. DO NOT FORGET to .gitignore!!!

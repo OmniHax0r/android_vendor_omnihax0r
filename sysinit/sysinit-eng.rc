@@ -1,0 +1,8 @@
+service sysinit /system/xbin/sysinit
+	user root
+	oneshot
+	disabled
+	seclabel u:r:su:s0
+
+on post-fs-data
+	start sysinit
