@@ -8,7 +8,16 @@ PRODUCT_SOONG_NAMESPACES += \
 # Prebuilt APPs
 PRODUCT_PACKAGES += \
 	MagiskManager \
-	omnihax0r-overlays
+	omnihax0r-overlays \
+	CallRecorder
+
+# Privledged APP Perms
+PRODUCT_COPY_FILES += \
+	vendor/omnihax0r/permissions/privapp-permissions-com.github.axet.callrecorder.xml:$(TARGET_COPY_OUT_SYSTEM)/etc/permissions/privapp-permissions-com.github.axet.callrecorder.xml
+
+# Default APP Perms
+PRODUCT_COPY_FILES += \
+	vendor/omnihax0r/default-permissions/callrecorder-permissions.xml:$(TARGET_COPY_OUT_SYSTEM)/etc/default-permissions/callrecorder-permissions.xml
 
 # HID USB Gadget file descriptors 
 PRODUCT_COPY_FILES += \

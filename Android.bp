@@ -28,3 +28,13 @@ android_app_import {
 	},
 }
 
+android_app_import {
+	name: "CallRecorder",
+	owner: "oneplus",
+	apk: "proprietary/apps/CallRecorder/CallRecorder.apk",
+	certificate: "testkey",
+	dex_preopt: {
+		enabled: false,
+	},
+	privileged: true,
+}
