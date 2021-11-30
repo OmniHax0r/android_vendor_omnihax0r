@@ -40,3 +40,13 @@ PRODUCT_COPY_FILES += \
 
 # SELinux Polices
 BOARD_PLAT_PRIVATE_SEPOLICY_DIR += vendor/omnihax0r/sepolicy/private
+
+# Private assets excluded in PUBLIC builds
+
+ifeq ($(ROM_BUILDTYPE),PRIVATE)
+
+## ADD PRIVATE ASSETS HERE NOT TO BE INCLUDED IN PUBLIC BUILDS. DO NOT FORGET to .gitignore!!!
+
+$(call inherit-product-if-exists, vendor/omnihax0r/private/private.mk)
+
+endif
