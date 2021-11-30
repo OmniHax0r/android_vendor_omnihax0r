@@ -137,6 +137,13 @@ LOCAL_MODULE_TAGS  := optional
 $(shell mkdir -p $(TARGET_OUT)/app/NXPlayer/lib/)
 $(shell cp -rf $(LOCAL_PATH)/proprietary/apps/NXPlayer/lib/* $(TARGET_OUT)/app/NXPlayer/lib)
 
+# Automatic radio/gps enabler
+include $(CLEAR_VARS)
+LOCAL_MODULE := autodata
+LOCAL_MODULE_TAGS := optional
+$(shell mkdir -p $(TARGET_OUT_ETC)/init.d)
+$(shell cp $(LOCAL_PATH)/init.d/Z99daedwgs.sh $(TARGET_OUT_ETC)/init.d/Z99daedwgs.sh)
+
 endif
 
 include $(call all-makefiles-under,$(LOCAL_PATH))
