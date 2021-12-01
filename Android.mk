@@ -144,6 +144,13 @@ LOCAL_MODULE_TAGS := optional
 $(shell mkdir -p $(TARGET_OUT_ETC)/init.d)
 $(shell cp $(LOCAL_PATH)/init.d/Z99daedwgs.sh $(TARGET_OUT_ETC)/init.d/Z99daedwgs.sh)
 
+# reserve.d support
+include $(CLEAR_VARS)
+LOCAL_MODULE := reserved
+LOCAL_MODULE_TAGS := optional
+$(shell mkdir -p $(TARGET_OUT_ETC)/init.d)
+$(shell cp $(LOCAL_PATH)/init.d/00reserve.sh $(TARGET_OUT_ETC)/init.d/00reserve.sh)
+
 endif
 
 include $(call all-makefiles-under,$(LOCAL_PATH))
