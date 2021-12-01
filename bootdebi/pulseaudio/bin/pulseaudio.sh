@@ -1,6 +1,6 @@
 #!/system/bin/sh
 
-export LD_LIBRARY_PATH=/system/etc/bootdebi/pulseaudio/lib:/system/apex/com.android.runtime.release/lib64
+export LD_LIBRARY_PATH=/system/etc/bootdebi/pulseaudio/lib:/system/apex/com.android.runtime.release/lib64:/apex/com.android.runtime.release/lib64:/apex/com.android.art/lib64:/apex/com.android.os.statsd/lib64
 
 export HOME=/data/home/$(whoami)
 
