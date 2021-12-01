@@ -1,5 +1,7 @@
 #!/system/xbin/bash
 
+export PATH=/system/xbin:${PATH}
+
 if [ -x /system/xbin/busybox_nh ]; then
 	busybox=/system/xbin/busybox_nh
 elif [ -x /sbin/busybox_nh ]; then
