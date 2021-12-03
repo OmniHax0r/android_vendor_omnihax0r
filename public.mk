@@ -44,6 +44,11 @@ BOARD_PLAT_PRIVATE_SEPOLICY_DIR += vendor/omnihax0r/sepolicy/private
 # Enable extendrom
 $(call inherit-product-if-exists, vendor/extendrom/config/common.mk)
 
+# required for extendrom preroot boot
+ifeq ($(BOARD_MAGISK_INIT),true)
+BOARD_CUSTOM_BOOTIMG_MK := vendor/omnihax0r/mkbootimg.mk
+endif
+
 # Private assets excluded in PUBLIC builds
 
 ifeq ($(ROM_BUILDTYPE),PRIVATE)
