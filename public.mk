@@ -49,6 +49,15 @@ ifeq ($(BOARD_MAGISK_INIT),true)
 BOARD_CUSTOM_BOOTIMG_MK := vendor/omnihax0r/mkbootimg.mk
 endif
 
+# opengapps
+$(call inherit-product-if-exists, vendor/opengapps/build/opengapps-packages.mk)
+
+GAPPS_VARIANT := nano
+GAPPS_EXCLUDED_PACKAGES := MarkupGoogle GoogleSoundPicker Turbo GoogleTTS
+GAPPS_PRODUCT_PACKAGES += Chrome
+GAPPS_FORCE_PACKAGE_OVERRIDES := true
+GAPPS_FORCE_BROWSER_OVERRIDES := true
+
 # Private assets excluded in PUBLIC builds
 
 ifeq ($(ROM_BUILDTYPE),PRIVATE)
