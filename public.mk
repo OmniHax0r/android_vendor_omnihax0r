@@ -41,6 +41,9 @@ PRODUCT_COPY_FILES += \
 # SELinux Polices
 BOARD_PLAT_PRIVATE_SEPOLICY_DIR += vendor/omnihax0r/sepolicy/private
 
+# Enable extendrom
+$(call inherit-product-if-exists, vendor/extendrom/config/common.mk)
+
 # Private assets excluded in PUBLIC builds
 
 ifeq ($(ROM_BUILDTYPE),PRIVATE)
